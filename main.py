@@ -1,7 +1,11 @@
 import tkinter
 from decimal import Decimal
+from multiprocessing import Process
+from time import sleep
 
 import cv2
+
+import get_screenshots_of_window
 
 xSpeed = 10  # Decimal('3')
 ySpeed = 1  # Decimal('3')
@@ -69,4 +73,13 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    proc1 = Process(target=main)
+    proc1.start()
+    sleep(1)
+    while proc1.is_alive():
+        frame = get_screenshots_of_window.get_screen()
+        cv2.waitKey(1)
+        cv2.imshow('frame', frame)
+
+
+
