@@ -38,19 +38,29 @@ def main():
 
         (leftPos, topPos, rightPos, bottomPos) = canvas.coords(ball)
 
+        # костыль, чтобы шар не завис в границах
         if bottomPos + ySpeed > HEIGHT:
             canvas.move(ball, xSpeed, HEIGHT - bottomPos)
+        elif topPos + ySpeed < 0:
+            canvas.move(ball, xSpeed, 0 - topPos)
+        elif rightPos + xSpeed > WIDTH:
+            canvas.move(ball, WIDTH - rightPos, ySpeed)
+        elif leftPos + xSpeed < 0:
+            canvas.move(ball, 0 - leftPos, ySpeed)
         else:
             canvas.move(ball, xSpeed, ySpeed)
-        (leftPos, topPos, rightPos, bottomPos) = canvas.coords(ball)
 
         #print(ySpeed, bottomPos)
         print(xSpeed, rightPos)
+        (leftPos, topPos, rightPos, bottomPos) = canvas.coords(ball)
 
+        # при любом касании уменьшаем скорость и направление
         if leftPos <= 0 or rightPos >= WIDTH:
             xSpeed = -xSpeed * energy_loss
+            ySpeed *= energy_loss
         if topPos <= 0 or bottomPos >= HEIGHT:
             ySpeed = -ySpeed * energy_loss
+            xSpeed *= energy_loss
 
         canvas.after(20, move_ball)
 
